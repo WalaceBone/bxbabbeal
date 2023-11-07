@@ -1,35 +1,42 @@
 {
-  "name": "boondxbasile",
-  "version": "1.0.0",
-  "engines": {
-    "npm": ">=9.8.1",
-    "node": ">=18.18.0"
-  },
-  "description": "Automatically integrate the cooptations' information from Boond Manager into Basile",
-  "keywords": [
-    "boond",
-    "basile"
-  ],
-  "author": "Florian Coussy",
-  "license": "GPL-3.0-only",
-  "main": "index.js",
-  "type": "module",
+  "name": "bxbnext",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "start": "node index.js",
-    "test": "jest"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "jest": {},
   "dependencies": {
+    "@vercel/blob": "^0.14.1",
     "axios": "^1.6.0",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "ssh2-sftp-client": "^9.1.0"
+    "formidable": "^3.5.1",
+    "multer": "^1.4.5-lts.1",
+    "multiparty": "^4.2.3",
+    "next": "14.0.1",
+    "next-connect": "^1.0.0",
+    "papaparse": "^5.4.1",
+    "react": "^18",
+    "react-dom": "^18",
+    "ssh2-sftp-client": "^9.1.0",
+    "vercel": "^32.5.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.2",
-    "@babel/node": "^7.22.19",
-    "@babel/preset-env": "^7.23.2",
-    "@types/jest": "^29.5.6",
-    "jest": "^29.7.0"
+    "@types/formidable": "^3.4.4",
+    "@types/multer": "^1.4.9",
+    "@types/multiparty": "^0.0.35",
+    "@types/node": "^20.8.10",
+    "@types/papaparse": "^5.3.10",
+    "@types/react": "^18.2.35",
+    "@types/react-dom": "^18",
+    "@types/ssh2-sftp-client": "^9.0.2",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.1",
+    "node-loader": "^2.0.0",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
   }
 }
