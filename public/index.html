@@ -74,6 +74,7 @@
   <p>Veuillez téléverser un fichier au format CSV.</p>
   <label for="file-input" class="custom-file-label">Choisir un fichier</label>
   <input id="file-input" accept=".csv" type="file" class="custom-file-input" hidden />
+  <form action="/upload" method="get"></form>
   <button id="file-submit" type="submit">Envoyer</button>
   <div id="message"></div>
   <div id="results">
@@ -128,7 +129,7 @@
 
     // Upload the file to NodeJS app for data mapping
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:8080/upload");
+    xhr.open("POST", "/upload");
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = ({ target }) => {
       if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {

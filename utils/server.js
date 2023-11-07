@@ -1,10 +1,17 @@
 import http from "http";
 import process from "node:process";
-
+import express from 'express';
 import { FOLDER_NAME, WEB_SERVER_HOST } from "../config/application.js";
 import { readFile, getEgressFileName, deleteFiles } from "./files.js";
 import { employeesAsJson, startMapping } from "./mapper.js";
 import { uploadFiles } from "./sftp.js";
+
+const app = express();
+app.use(express.bodyParser());
+
+app.get('/transmit', async (req, res) => { });
+
+app.get('/upload', async (req, res) => { });
 
 const requestListener = async (req, res) => {
   try {
