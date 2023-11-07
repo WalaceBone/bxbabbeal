@@ -71,4 +71,4 @@ const serveData = (body) => {
 
 const server = http.createServer(requestListener);
 
-export { server, serveData };
+export { app, server, serveData };
