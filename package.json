@@ -1,35 +1,15 @@
 {
-  "name": "boondxbasile",
+  "name": "template-go-vercel",
   "version": "1.0.0",
-  "engines": {
-    "npm": ">=9.8.1",
-    "node": ">=18.18.0"
-  },
-  "description": "Automatically integrate the cooptations' information from Boond Manager into Basile",
-  "keywords": [
-    "boond",
-    "basile"
-  ],
-  "author": "Florian Coussy",
-  "license": "GPL-3.0-only",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "start": "node index.js",
-    "test": "jest"
-  },
-  "jest": {},
+  "repository": "https://github.com/riccardogiorato/template-go-vercel",
+  "author": "riccardogiorato <https://riccardogiorato.com/>",
+  "license": "MIT",
   "dependencies": {
-    "axios": "^1.6.0",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "ssh2-sftp-client": "^9.1.0"
+    "vercel": "^31.2.2"
   },
-  "devDependencies": {
-    "@babel/core": "^7.23.2",
-    "@babel/node": "^7.22.19",
-    "@babel/preset-env": "^7.23.2",
-    "@types/jest": "^29.5.6",
-    "jest": "^29.7.0"
+  "scripts": {
+    "setup": "yarn vercel login && yarn vercel link",
+    "start": "yarn vercel dev",
+    "dev": "yarn start"
   }
 }

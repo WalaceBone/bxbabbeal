@@ -1,80 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <title>Abbeal | Cooptation</title>
-  <meta charset="utf-8">
+  <title>template-go-vercel</title>
   <style>
     *,
-    html,
-    body {
-      font-family: sans-serif;
+    :after,
+    :before {
+      box-sizing: border-box;
+      border: 0 solid;
     }
 
-    table,
-    th,
-    td {
-      border-collapse: collapse;
-      border: 1px solid #ddd;
-      padding: 8px;
-    }
-
-    tr:nth-child(even) {
-      background-color: #f2f2f2;
-    }
-
-    .error {
-      margin-top: 15px;
-      color: red;
-    }
-
-    .success {
-      margin-top: 15px;
-      color: green;
-    }
-
-    #results {
-      display: none;
-    }
-
-    #results-length,
-    #results-submit {
-      display: inline-block;
+    html {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
+        Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
     }
 
     body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
+      padding-top: 2.5rem;
+      padding-bottom: 2.5rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      max-width: 48rem;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    .custom-file-label,
-    button {
-      background-color: #007BFF;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
+    h1 {
+      font-size: 1.6285714em;
+      margin-top: 0.8em;
+      margin-bottom: 0.8em;
+      line-height: 1.4;
     }
 
-    .custom-file-label:hover,
-    button:hover {
-      background-color: #0056b3;
+    a {
+      display: block;
+      font-size: 1.2857143em;
+      margin-top: 1.5555556em;
+      margin-bottom: 0.4444444em;
+      line-height: 1.5555556;
+      text-decoration: underline;
+      font-weight: 500;
+      color: #111827;
     }
   </style>
 </head>
 
 <body>
-  <h1>Boond Manager X Basile</h1>
+  <h1>BXB</h1>
+
+  <form id="upload-form" enctype="multipart/form-data">
+    <input type="file" id="file-input" name="file" required />
+    <button type="submit">Upload File</button>
+  </form>
+  <script src="script.js"></script>
+  <!-- <h1>Boond Manager X Basile</h1>
   <p>Veuillez téléverser un fichier au format CSV.</p>
   <label for="file-input" class="custom-file-label">Choisir un fichier</label>
   <input id="file-input" accept=".csv" type="file" class="custom-file-input" hidden />
-  <form id="file-form" action="/upload" method="post">
+  <form id="file-form" action="/api/upload" method="POST">
     <button id="file-submit" type="submit">Envoyer</button>
   </form>
   <div id="message"></div>
@@ -95,77 +80,10 @@
       </thead>
       <tbody></tbody>
     </table>
-  </div>
+  </div> -->
+
+  <br />
+
 </body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script>
-  const formats = ["text/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"];
-
-  const fileInput = document.querySelector('#file-input');
-  const fileSubmit = document.querySelector('#file-submit');
-
-  const resultsContainer = document.querySelector('#results');
-  const resultsLength = document.querySelector('#results-length');
-  const resultsTableBody = document.querySelector('#results-table tbody');
-  const resultsSubmit = document.querySelector('#results-submit');
-
-  const message = document.querySelector('#message');
-  $('#file-form').submit(function () { return false });
-  fileSubmit.addEventListener('click', () => {
-    const files = fileInput.files;
-
-    // No file selected => ERR
-    if (files.length === 0) {
-      message.className = "error";
-      message.textContent = "Veuillez sélectionner un fichier."
-      return;
-    }
-
-    // More than one file selected => ERR
-    if (files.length > 1) {
-      message.className = "error";
-      message.textContent = "Veuillez ne sélectionner qu'un seul fichier."
-      return;
-    }
-
-    // Upload the file to NodeJS app for data mapping
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/upload");
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = ({ target }) => {
-      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-        message.className = "success";
-        message.textContent = "Chargement du fichier terminé!";
-        const results = JSON.parse(target.response);
-        resultsLength.textContent = `${results.length} collaborateurs trouvés.`;
-        results.forEach(result => {
-          const tr = document.createElement('tr');
-          Object.values(result).forEach(value => {
-            const td = document.createElement('td');
-            td.textContent = value;
-            tr.appendChild(td);
-          })
-          resultsTableBody.append(tr);
-        });
-        resultsContainer.style.display = "block";
-      }
-    };
-    xhr.send(files[0]);
-  });
-
-  resultsSubmit.addEventListener('click', () => {
-    // Transmit the data to Basile SFTP server
-
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://localhost:8080/transmit");
-    xhr.onreadystatechange = ({ target }) => {
-      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-        console.log('Results transmitted to Basile');
-      };
-    };
-    xhr.send();
-    console.log(xhr);
-  })
-</script>
 
 </html>
