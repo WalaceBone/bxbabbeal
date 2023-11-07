@@ -23,6 +23,7 @@ const remoteFilePath = "/"
 
 async function uploadFiles(file) {
     try {
+        console.log(sftpOptions);
         await sftp.connect(sftpOptions);
         console.log(`${process.cwd()}/${FOLDER_NAME}/` + file);
         //const fileData = fs.createReadStream(file);

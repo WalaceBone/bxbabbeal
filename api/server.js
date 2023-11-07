@@ -19,7 +19,12 @@ app.get('/', async (req, res) => {
   res.end(html);
 })
 
-app.get('/transmit', async (req, res) => { });
+app.get('/transmit', async (req, res) => {
+  
+  await uploadFiles(getEgressFileName());
+  await deleteFiles();
+  res.status(200).send("DONE");
+});
 
 app.post('/upload', async (req, res) => {
   try {
@@ -66,7 +71,7 @@ const requestListener = async (req, res) => {
         //   });
         break;
 
-      case "/transmit":
+      case "/oldtransmit":
         await uploadFiles(getEgressFileName());
         await deleteFiles();
         res.writeHead(200);
