@@ -7,11 +7,40 @@ import { employeesAsJson, startMapping } from "../utils/mapper.js";
 import { uploadFiles } from "../utils/sftp.js";
 
 const app = express();
+app.use((req, res, next) => {
+  console.log('Time:', Date.now())
+  next()
+})
 
+app.get('/', async (req, res) => {
+  const html = await readFile(`${process.cwd()}/${FOLDER_NAME}/index.html`);
+  res.setHeader("Content-Type", "text/html");
+  res.writeHead(200);
+  res.end(html);
+})
 
 app.get('/transmit', async (req, res) => { });
 
-app.get('/upload', async (req, res) => { });
+app.post('/upload', async (req, res) => {
+  try {
+    const chunks = [];
+    req
+      .on('data', chunk => chunks.push(chunk))
+      .on('end', () => {
+        const body = Buffer.concat(chunks).toString();
+        startMapping(body);
+        res.writeHead(200);
+        res.end(JSON.stringify(employeesAsJson));
+        res.status(200).send();
+      });
+
+  } catch (error) {
+    res.writeHead(500);
+    res.end();
+    console.error(error.message);
+  }
+
+});
 
 const requestListener = async (req, res) => {
   try {
@@ -25,16 +54,16 @@ const requestListener = async (req, res) => {
         res.end(html);
         break;
 
-      case "/upload":
-        const chunks = [];
-        req
-          .on('data', chunk => chunks.push(chunk))
-          .on('end', () => {
-            const body = Buffer.concat(chunks).toString();
-            startMapping(body);
-            res.writeHead(200);
-            res.end(JSON.stringify(employeesAsJson));
-          });
+      case "/oldupload":
+        // const chunks = [];
+        // req
+        //   .on('data', chunk => chunks.push(chunk))
+        //   .on('end', () => {
+        //     const body = Buffer.concat(chunks).toString();
+        //     startMapping(body);
+        //     res.writeHead(200);
+        //     res.end(JSON.stringify(employeesAsJson));
+        //   });
         break;
 
       case "/transmit":
@@ -69,6 +98,6 @@ const serveData = (body) => {
   }).end();
 };
 
-const server = http.createServer(requestListener);
+// const server = http.createServer(requestListener);
 
-export { app, server, serveData };
+export { app, serveData };

@@ -74,8 +74,9 @@
   <p>Veuillez téléverser un fichier au format CSV.</p>
   <label for="file-input" class="custom-file-label">Choisir un fichier</label>
   <input id="file-input" accept=".csv" type="file" class="custom-file-input" hidden />
-  <form action="/upload" method="get"></form>
-  <button id="file-submit" type="submit">Envoyer</button>
+  <form id="file-form" action="/upload" method="post">
+    <button id="file-submit" type="submit">Envoyer</button>
+  </form>
   <div id="message"></div>
   <div id="results">
     <hr />
@@ -96,7 +97,7 @@
     </table>
   </div>
 </body>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
   const formats = ["text/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"];
 
@@ -109,7 +110,7 @@
   const resultsSubmit = document.querySelector('#results-submit');
 
   const message = document.querySelector('#message');
-
+  $('#file-form').submit(function () { return false });
   fileSubmit.addEventListener('click', () => {
     const files = fileInput.files;
 
