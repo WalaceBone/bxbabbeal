@@ -1,31 +1,42 @@
-// pages/index.tsx
-"use client";
-import React, { useState } from 'react';
-import FileInput from './csv/csv.client';
-import axios from 'axios';
-
-const Home: React.FC = () => {
-  const [fileContent, setFileContent] = useState<string>('');
-
-  const handleFileUpload = async () => {
-    try {
-      const response = await axios.post('/api/sftp-upload', { content: fileContent });
-      alert(response.data.message);
-    } catch (error) {
-      alert('Error uploading file: ' + error);
-    }
-  };
-
+'use client';
+ 
+import { type PutBlobResult } from '@vercel/blob';
+import { upload } from '@vercel/blob/client';
+import { useState, useRef } from 'react';
+ 
+export default function AvatarUploadPage() {
+  const inputFileRef = useRef<HTMLInputElement>(null);
+  const [blob, setBlob] = useState<PutBlobResult | null>(null);
   return (
-    <div>
-      <FileInput onFileLoaded={setFileContent} />
-      <button onClick={handleFileUpload} disabled={!fileContent}>
-        Upload via SFTP
-      </button>
-      {/* Display the file content in a preformatted text block */}
-      {fileContent && <pre>{fileContent}</pre>}
-    </div>
+    <>
+      <h1>Upload Your Avatar</h1>
+ 
+      <form
+        onSubmit={async (event) => {
+          event.preventDefault();
+ 
+          if (!inputFileRef.current?.files) {
+            throw new Error('No file selected');
+          }
+ 
+          const file = inputFileRef.current.files[0];
+ 
+          const newBlob = await upload(file.name, file, {
+            access: 'public',
+            handleUploadUrl: '/api/upload',
+          });
+ 
+          setBlob(newBlob);
+        }}
+      >
+        <input name="file" ref={inputFileRef} type="file" required />
+        <button type="submit">Upload</button>
+      </form>
+      {blob && (
+        <div>
+          Blob url: <a href={blob.url}>{blob.url}</a>
+        </div>
+      )}
+    </>
   );
-};
-
-export default Home;
+}
