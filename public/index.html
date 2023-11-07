@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Abbeal | Cooptation</title>
+  <meta charset="utf-8">
+  <style>
+    *,
+    html,
+    body {
+      font-family: sans-serif;
+    }
+
+    table,
+    th,
+    td {
+      border-collapse: collapse;
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .error {
+      margin-top: 15px;
+      color: red;
+    }
+
+    .success {
+      margin-top: 15px;
+      color: green;
+    }
+
+    #results {
+      display: none;
+    }
+
+    #results-length,
+    #results-submit {
+      display: inline-block;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .custom-file-label,
+    button {
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .custom-file-label:hover,
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Boond Manager X Basile</h1>
+  <p>Veuillez téléverser un fichier au format CSV.</p>
+  <label for="file-input" class="custom-file-label">Choisir un fichier</label>
+  <input id="file-input" accept=".csv" type="file" class="custom-file-input" hidden />
+  <button id="file-submit" type="submit">Envoyer</button>
+  <div id="message"></div>
+  <div id="results">
+    <hr />
+    <div>
+      <p id="results-length"></p>
+      <button id="results-submit" type="submit">
+        Transmettre les résultats à Basile
+      </button>
+    </div>
+    <table id="results-table">
+      <thead>
+        <th>Nom de famille</th>
+        <th>Prénom</th>
+        <th>E-mail</th>
+        <th>Ville / Zip Code</th>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</body>
+
+<script>
+  const formats = ["text/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"];
+
+  const fileInput = document.querySelector('#file-input');
+  const fileSubmit = document.querySelector('#file-submit');
+
+  const resultsContainer = document.querySelector('#results');
+  const resultsLength = document.querySelector('#results-length');
+  const resultsTableBody = document.querySelector('#results-table tbody');
+  const resultsSubmit = document.querySelector('#results-submit');
+
+  const message = document.querySelector('#message');
+
+  fileSubmit.addEventListener('click', () => {
+    const files = fileInput.files;
+
+    // No file selected => ERR
+    if (files.length === 0) {
+      message.className = "error";
+      message.textContent = "Veuillez sélectionner un fichier."
+      return;
+    }
+
+    // More than one file selected => ERR
+    if (files.length > 1) {
+      message.className = "error";
+      message.textContent = "Veuillez ne sélectionner qu'un seul fichier."
+      return;
+    }
+
+    // Upload the file to NodeJS app for data mapping
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:8080/upload");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = ({ target }) => {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        message.className = "success";
+        message.textContent = "Chargement du fichier terminé!";
+        const results = JSON.parse(target.response);
+        resultsLength.textContent = `${results.length} collaborateurs trouvés.`;
+        results.forEach(result => {
+          const tr = document.createElement('tr');
+          Object.values(result).forEach(value => {
+            const td = document.createElement('td');
+            td.textContent = value;
+            tr.appendChild(td);
+          })
+          resultsTableBody.append(tr);
+        });
+        resultsContainer.style.display = "block";
+      }
+    };
+    xhr.send(files[0]);
+  });
+
+  resultsSubmit.addEventListener('click', () => {
+    // Transmit the data to Basile SFTP server
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://localhost:8080/transmit");
+    xhr.onreadystatechange = ({ target }) => {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        console.log('Results transmitted to Basile');
+      };
+    };
+    xhr.send();
+    console.log(xhr);
+  })
+</script>
+
+</html>
