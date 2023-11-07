@@ -11,7 +11,7 @@ import {
 } from "./config/application.js";
 import { server } from "./utils/server.js";
 
-server.listen(WEB_SERVER_PORT, WEB_SERVER_HOST, () => {
+server.listen(process.env.PORT, process.env.IP, () => {
   console.log('----- Basile X Boond Manager -----\n');
   console.log(`Server is running `);
 });
